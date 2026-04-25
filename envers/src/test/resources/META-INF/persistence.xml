@@ -1,0 +1,66 @@
+<!--
+  ~ SPDX-License-Identifier: Apache-2.0
+  ~ Copyright Red Hat Inc. and Hibernate Authors
+  -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="org.hibernate.tutorial.envers">
+        <description>
+            Persistence unit for the Envers tutorial of the Hibernate Getting Started Guide
+        </description>
+
+        <class>org.hibernate.tutorial.envers.Event</class>
+        <class>org.hibernate.tutorial.envers.ExampleRevEntity</class>
+
+        <properties>
+            <!-- Database connection settings -->
+<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1" />-->
+<!--            <property name="jakarta.persistence.jdbc.user" value="sa" />-->
+<!--            <property name="jakarta.persistence.jdbc.password" value="" />-->
+
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/posts_db?currentSchema=dev" />
+            <property name="jakarta.persistence.jdbc.user" value="postgres" />
+            <property name="jakarta.persistence.jdbc.password" value="secret" />
+<!--            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />-->
+<!--            Hibernate dialet for PostgreSQL-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>-->
+
+            <!-- Automatically export the schema -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create" />
+
+            <!-- Echo all executed SQL to console -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.highlight_sql" value="true" />
+            
+<!--            Envers properties-->
+            <property name="hibernate.ejb.event.post-insert"
+                      value="org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener" />
+            <property name="hibernate.ejb.event.post-update"
+                      value="org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener" />
+            <property name="hibernate.ejb.event.post-delete"
+                      value="org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener" />
+            <property name="hibernate.ejb.event.pre-collection-update"
+                      value="org.hibernate.envers.event.AuditEventListener" />
+            <property name="hibernate.ejb.event.pre-collection-remove"
+                      value="org.hibernate.envers.event.AuditEventListener" />
+            <property name="hibernate.ejb.event.post-collection-recreate"
+                      value="org.hibernate.envers.event.AuditEventListener" />
+
+            <property name="org.hibernate.envers.revision_field_name" value="REV"/>
+            <property name="org.hibernate.envers.store_data_at_delete" value="true" />
+<!--            <property name="org.hibernate.envers.audit_strategy" value="org.hibernate.envers.strategy.DefaultAuditStrategy"/>-->
+            <property name="org.hibernate.envers.audit_strategy" value="org.hibernate.envers.strategy.ValidityAuditStrategy"/>
+            <property name="org.hibernate.envers.audit_strategy_validity_end_rev_field_name" value="REVEND"/>
+            <property name="org.hibernate.envers.audit_strategy_validity_store_revend_timestamp" value="true"/>
+            <property name="org.hibernate.envers.audit_strategy_validity_revend_timestamp_field_name" value="REVEND_TSTMP"/>
+
+
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
